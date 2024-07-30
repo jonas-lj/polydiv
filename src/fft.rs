@@ -121,20 +121,9 @@ fn fft_group_offset<G: GroupElement>(
     let half_n = n / 2;
 
     // TODO: This implicitly assumes that n is even
-    let even_fft = fft_group_offset(
-        v,
-        offset,
-        2 * step,
-        n - half_n,
-        &root_of_unity.mul(root_of_unity),
-    );
-    let odd_fft = fft_group_offset(
-        v,
-        offset + step,
-        2 * step,
-        half_n,
-        &root_of_unity.mul(root_of_unity),
-    );
+    let root_of_unity_squared = root_of_unity.mul(root_of_unity);
+    let even_fft = fft_group_offset(v, offset, 2 * step, n - half_n, &root_of_unity_squared);
+    let odd_fft = fft_group_offset(v, offset + step, 2 * step, half_n, &root_of_unity_squared);
 
     let mut omega = G::ScalarType::from(1);
     let mut result = vec![G::zero(); n];
